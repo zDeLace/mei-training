@@ -98,8 +98,17 @@ nav {
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
-
+.blockx2wide {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
 .block h2 {
+    color: #e74c3c;
+    margin-bottom: 15px;
+}
+.blockx2wide h2 {
     color: #e74c3c;
     margin-bottom: 15px;
 }
