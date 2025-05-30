@@ -17,6 +17,12 @@ body {
 
 nav {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
+}
+navwide {
+    display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 40px;
@@ -105,10 +111,14 @@ nav {
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 .block h2 {
-    color: #e74c3c;
+    color: #14ee4a;
+    margin-bottom: 15px;
+}
+.h2 {
+    color: #14ee4a;
     margin-bottom: 15px;
 }
 .blockx2wide h2 {
-    color: #e74c3c;
+    color: #33147c;
     margin-bottom: 15px;
 }
