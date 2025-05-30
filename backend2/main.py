@@ -579,7 +579,5 @@ def complete_exercise(exercise_id: int):
 # Обслуживание фронтенда
 from fastapi.staticfiles import StaticFiles
 import os
-frontend_path = os.path.join(os.path.dirname(__file__), "C:\\vscode\\test\\frontend")
-if os.path.exists(frontend_path):
-    app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend")
-app.mount("/", StaticFiles(directory="frontend", html=True), name="static")
+
+app.mount("/", StaticFiles(directory="frontendtest", html=True), name="frontendtest") #заменить на frontendtest для теста
