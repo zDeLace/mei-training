@@ -4,36 +4,1342 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MEI-training</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #4a00e0;
+            --secondary: #8e2de2;
+            --accent: #00c9ff;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .background-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #ff8a00, #da1b60);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+        
+        nav a:hover, nav a.active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, var(--accent), #92fe9d);
+            color: var(--dark);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+            color: white;
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+        
+        /* Page sections */
+        .page-section {
+            display: none;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: var(--box-shadow);
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .active-section {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent);
+        }
+        
+        /* Auth forms */
+        .auth-container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .auth-title {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 25px;
+            background: linear-gradient(to right, var(--accent), #92fe9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: var(--border-radius);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .form-footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        /* Dashboard */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            transition: var(--transition);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            height: 100%;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .dashboard-card i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, var(--accent), #92fe9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .dashboard-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .dashboard-card p {
+            opacity: 0.8;
+        }
+        
+        /* Workout section */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .workout-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .workout-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .workout-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .workout-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .workout-card p {
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+        
+        .workout-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .exercise-list {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .exercise-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--border-radius);
+            margin-bottom: 8px;
+        }
+        
+        .exercise-item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Timer */
+        .timer-container {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .timer-display {
+            font-size: 4rem;
+            font-weight: 700;
+            margin: 20px 0;
+            font-family: monospace;
+            background: linear-gradient(to right, #ff8a00, #da1b60);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .workout-list {
+                grid-template-columns: 1fr;
+            }
+            
+            nav ul {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
+    <div class="background-shapes" id="backgroundShapes"></div>
+    
+    <header>
+        <div class="logo">MEI-training</div>
         <nav>
-            <div class="logo">MEI-training</div>
-            <div class="nav-links">
-                <a href="#">Главная</a>
-                <a href="#">Обратная связь</a>
-            </div>
-            <div class="auth-buttons">
-                <a href="auth/login.html" class="btn login-btn">Войти</a>
-                <a href="auth/register.html" class="btn register-btn">Регистрация</a>
-            </div>
+            <ul id="mainNav">
+                <li><a href="#" class="nav-link" data-section="home">Главная</a></li>
+                <li><a href="#" class="nav-link" data-section="workout">Тренировки</a></li>
+                <li><a href="#" class="nav-link" data-section="nutrition">Питание</a></li>
+                <li><a href="#" class="nav-link" data-section="calendar">Календарь</a></li>
+            </ul>
         </nav>
-
-        <div class="hero-section">
-            <h1>Всё о тренировках</h1>
-            <div class="content-blocks">
-                <div class="block">
-                    <h2>Примеры тренировок</h2>
-                    <p>Лучшие программы для любого уровня подготовки</p>
+        <div class="auth-buttons" id="authButtons">
+            <button class="btn btn-primary" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Вход</button>
+            <button class="btn btn-outline" id="registerBtn">Регистрация</button>
+        </div>
+        <div id="userMenu" style="display: none;">
+            <button class="btn btn-outline" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Выход</button>
+        </div>
+    </header>
+    
+    <div class="container">
+        <!-- Главная страница -->
+        <section id="home" class="page-section active-section">
+            <div class="dashboard-grid">
+                <div class="dashboard-card" data-section="workout">
+                    <i class="fas fa-dumbbell"></i>
+                    <h3>Тренировки</h3>
+                    <p>Создавайте и управляйте своими тренировками</p>
                 </div>
-                <div class="block">
-                    <h2>Персональный подход</h2>
-                    <p>Индивидуальные планы занятий</p>
+                
+                <div class="dashboard-card" data-section="nutrition">
+                    <i class="fas fa-utensils"></i>
+                    <h3>Питание</h3>
+                    <p>Отслеживайте свой рацион и планируйте питание</p>
                 </div>
+                
+                <div class="dashboard-card" data-section="calendar">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h3>Календарь</h3>
+                    <p>Планируйте свои тренировки и отслеживайте прогресс</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Страница тренировок -->
+        <section id="workout" class="page-section">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-dumbbell"></i> Тренировки</h2>
+                <div>
+                    <button class="btn btn-primary" id="createWorkoutBtn"><i class="fas fa-plus"></i> Создать тренировку</button>
+                    <button class="btn btn-secondary" id="createExerciseBtn"><i class="fas fa-plus"></i> Создать упражнение</button>
+                </div>
+            </div>
+            
+            <div class="workout-list" id="workoutList">
+                <!-- Список тренировок будет здесь -->
+            </div>
+        </section>
+        
+        <!-- Страница питания -->
+        <section id="nutrition" class="page-section">
+            <h2 class="section-title"><i class="fas fa-utensils"></i> Питание</h2>
+            <p>Раздел в разработке...</p>
+        </section>
+        
+        <!-- Страница календаря -->
+        <section id="calendar" class="page-section">
+            <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Календарь</h2>
+            <p>Раздел в разработке...</p>
+        </section>
+        
+        <!-- Страница входа -->
+        <section id="login" class="page-section">
+            <div class="auth-container">
+                <h2 class="auth-title">Вход в аккаунт</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail"><i class="fas fa-envelope"></i> Email</label>
+                        <input type="email" id="loginEmail" name="email" required placeholder="Ваш email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="loginPassword"><i class="fas fa-lock"></i> Пароль</label>
+                        <input type="password" id="loginPassword" name="password" required placeholder="Ваш пароль">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <i class="fas fa-sign-in-alt"></i> Войти
+                    </button>
+                    
+                    <div class="form-footer">
+                        <p>Еще нет аккаунта? <a href="#" id="showRegister">Зарегистрироваться</a></p>
+                    </div>
+                </form>
+            </div>
+        </section>
+        
+        <!-- Страница регистрации -->
+        <section id="register" class="page-section">
+            <div class="auth-container">
+                <h2 class="auth-title">Создание аккаунта</h2>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="fullName"><i class="fas fa-user"></i> Полное имя</label>
+                        <input type="text" id="fullName" name="full_name" placeholder="Ваше имя">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                        <input type="email" id="email" name="email" required placeholder="Ваш email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password"><i class="fas fa-lock"></i> Пароль</label>
+                        <input type="password" id="password" name="password" required placeholder="Не менее 6 символов">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmPassword"><i class="fas fa-lock"></i> Подтвердите пароль</label>
+                        <input type="password" id="confirmPassword" required placeholder="Повторите пароль">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <i class="fas fa-user-plus"></i> Зарегистрироваться
+                    </button>
+                    
+                    <div class="form-footer">
+                        <p>Уже есть аккаунт? <a href="#" id="showLogin">Войти</a></p>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Модальное окно создания тренировки -->
+    <div class="modal" id="createWorkoutModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeWorkoutModal">&times;</button>
+            <h2 class="section-title">Создать тренировку</h2>
+            <form id="workoutForm">
+                <div class="form-group">
+                    <label for="workoutName">Название тренировки</label>
+                    <input type="text" id="workoutName" name="name" required placeholder="Утренняя зарядка">
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-plus"></i> Создать
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Модальное окно создания упражнения -->
+    <div class="modal" id="createExerciseModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeExerciseModal">&times;</button>
+            <h2 class="section-title">Создать упражнение</h2>
+            <form id="exerciseForm">
+                <div class="form-group">
+                    <label for="exerciseName">Название упражнения</label>
+                    <input type="text" id="exerciseName" name="name" required placeholder="Приседания">
+                </div>
+                
+                <div class="form-group">
+                    <label for="exerciseDescription">Описание</label>
+                    <input type="text" id="exerciseDescription" name="description" placeholder="3 подхода по 10 повторений">
+                </div>
+                
+                <div class="form-group">
+                    <label for="exerciseDuration">Длительность (секунды)</label>
+                    <input type="number" id="exerciseDuration" name="duration" placeholder="60 (необязательно)">
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-plus"></i> Создать
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Модальное окно добавления упражнения в тренировку -->
+    <div class="modal" id="addExerciseModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeAddExerciseModal">&times;</button>
+            <h2 class="section-title">Добавить упражнение</h2>
+            <form id="addExerciseForm">
+                <input type="hidden" id="currentWorkoutId">
+                
+                <div class="form-group">
+                    <label for="selectExercise">Выберите упражнение</label>
+                    <select id="selectExercise" class="form-group input" required>
+                        <option value="">-- Выберите упражнение --</option>
+                        <!-- Опции будут добавлены через JS -->
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="exerciseDurationInWorkout">Длительность (секунды)</label>
+                    <input type="number" id="exerciseDurationInWorkout" name="duration" placeholder="60 (необязательно)">
+                </div>
+                
+                <div class="form-group">
+                    <label for="exerciseOrder">Порядок выполнения</label>
+                    <input type="number" id="exerciseOrder" name="order" min="1" value="1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="autoContinue" name="auto_continue" checked>
+                        Автоматически продолжать следующее упражнение
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-plus"></i> Добавить
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Модальное окно активной тренировки -->
+    <div class="modal" id="activeWorkoutModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeActiveWorkoutModal">&times;</button>
+            <h2 class="section-title" id="activeWorkoutTitle">Активная тренировка</h2>
+            
+            <div class="timer-container">
+                <div class="timer-display" id="timerDisplay">00:00</div>
+                <div class="timer-controls">
+                    <button class="btn btn-primary" id="startTimerBtn"><i class="fas fa-play"></i> Старт</button>
+                    <button class="btn btn-warning" id="pauseTimerBtn"><i class="fas fa-pause"></i> Пауза</button>
+                    <button class="btn btn-success" id="completeExerciseBtn"><i class="fas fa-check"></i> Завершить</button>
+                </div>
+            </div>
+            
+            <div id="currentExerciseInfo">
+                <h3>Текущее упражнение: <span id="currentExerciseName">-</span></h3>
+                <p>Описание: <span id="currentExerciseDescription">-</span></p>
+                <p>Длительность: <span id="currentExerciseDuration">-</span> секунд</p>
+            </div>
+            
+            <div class="exercise-list" id="workoutExerciseList">
+                <!-- Упражнения тренировки будут здесь -->
             </div>
         </div>
     </div>
-    <script src="js/app.js"></script>
+
+    <script>
+        // Конфигурация
+        const API_BASE_URL = 'http://localhost:8000';
+        
+        // Элементы DOM
+        const backgroundShapes = document.getElementById('backgroundShapes');
+        const pageSections = document.querySelectorAll('.page-section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const authButtons = document.getElementById('authButtons');
+        const userMenu = document.getElementById('userMenu');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const showLogin = document.getElementById('showLogin');
+        const showRegister = document.getElementById('showRegister');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const createWorkoutBtn = document.getElementById('createWorkoutBtn');
+        const createExerciseBtn = document.getElementById('createExerciseBtn');
+        const workoutList = document.getElementById('workoutList');
+        const createWorkoutModal = document.getElementById('createWorkoutModal');
+        const closeWorkoutModal = document.getElementById('closeWorkoutModal');
+        const workoutForm = document.getElementById('workoutForm');
+        const createExerciseModal = document.getElementById('createExerciseModal');
+        const closeExerciseModal = document.getElementById('closeExerciseModal');
+        const exerciseForm = document.getElementById('exerciseForm');
+        const addExerciseModal = document.getElementById('addExerciseModal');
+        const closeAddExerciseModal = document.getElementById('closeAddExerciseModal');
+        const addExerciseForm = document.getElementById('addExerciseForm');
+        const selectExercise = document.getElementById('selectExercise');
+        const activeWorkoutModal = document.getElementById('activeWorkoutModal');
+        const closeActiveWorkoutModal = document.getElementById('closeActiveWorkoutModal');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const startTimerBtn = document.getElementById('startTimerBtn');
+        const pauseTimerBtn = document.getElementById('pauseTimerBtn');
+        const completeExerciseBtn = document.getElementById('completeExerciseBtn');
+        const currentExerciseName = document.getElementById('currentExerciseName');
+        const currentExerciseDescription = document.getElementById('currentExerciseDescription');
+        const currentExerciseDuration = document.getElementById('currentExerciseDuration');
+        const workoutExerciseList = document.getElementById('workoutExerciseList');
+        const activeWorkoutTitle = document.getElementById('activeWorkoutTitle');
+        
+        // Состояние приложения
+        let currentUser = null;
+        let workouts = [];
+        let exercises = [];
+        let activeWorkout = null;
+        let currentTimer = null;
+        let timerInterval = null;
+        let timeLeft = 0;
+        let isTimerRunning = false;
+        
+        // Инициализация приложения
+        document.addEventListener('DOMContentLoaded', function() {
+            initBackground();
+            checkAuth();
+            setupEventListeners();
+        });
+        
+        // Создание анимированного фона
+        function initBackground() {
+            for (let i = 0; i < 15; i++) {
+                const shape = document.createElement('div');
+                shape.classList.add('shape');
+                
+                const size = Math.random() * 200 + 50;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const colors = ['#4a00e0', '#8e2de2', '#1a2a6c', '#b21f1f', '#fdbb2d'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                shape.style.width = `${size}px`;
+                shape.style.height = `${size}px`;
+                shape.style.left = `${posX}%`;
+                shape.style.top = `${posY}%`;
+                shape.style.background = color;
+                shape.style.opacity = Math.random() * 0.1 + 0.05;
+                
+                backgroundShapes.appendChild(shape);
+            }
+        }
+        
+        // Настройка обработчиков событий
+        function setupEventListeners() {
+            // Навигация
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showSection(link.dataset.section);
+                });
+            });
+            
+            // Карточки на главной
+            document.querySelectorAll('.dashboard-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    showSection(card.dataset.section);
+                });
+            });
+            
+            // Аутентификация
+            loginBtn.addEventListener('click', () => showSection('login'));
+            registerBtn.addEventListener('click', () => showSection('register'));
+            showLogin.addEventListener('click', (e) => {
+                e.preventDefault();
+                showSection('login');
+            });
+            showRegister.addEventListener('click', (e) => {
+                e.preventDefault();
+                showSection('register');
+            });
+            logoutBtn.addEventListener('click', logout);
+            
+            // Формы
+            loginForm.addEventListener('submit', handleLogin);
+            registerForm.addEventListener('submit', handleRegister);
+            
+            // Тренировки
+            createWorkoutBtn.addEventListener('click', () => {
+                createWorkoutModal.classList.add('active');
+            });
+            
+            closeWorkoutModal.addEventListener('click', () => {
+                createWorkoutModal.classList.remove('active');
+            });
+            
+            workoutForm.addEventListener('submit', createWorkout);
+            
+            createExerciseBtn.addEventListener('click', () => {
+                createExerciseModal.classList.add('active');
+            });
+            
+            closeExerciseModal.addEventListener('click', () => {
+                createExerciseModal.classList.remove('active');
+            });
+            
+            exerciseForm.addEventListener('submit', createExercise);
+            
+            closeAddExerciseModal.addEventListener('click', () => {
+                addExerciseModal.classList.remove('active');
+            });
+            
+            addExerciseForm.addEventListener('submit', addExerciseToWorkout);
+            
+            // Таймер
+            startTimerBtn.addEventListener('click', startTimer);
+            pauseTimerBtn.addEventListener('click', pauseTimer);
+            completeExerciseBtn.addEventListener('click', completeExercise);
+            
+            closeActiveWorkoutModal.addEventListener('click', () => {
+                activeWorkoutModal.classList.remove('active');
+                if (timerInterval) clearInterval(timerInterval);
+            });
+        }
+        
+        // Проверка аутентификации
+        function checkAuth() {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                // Проверяем токен
+                fetch(`${API_BASE_URL}/users/me`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Недействительный токен');
+                    }
+                })
+                .then(user => {
+                    currentUser = user;
+                    updateUI();
+                    loadWorkouts();
+                    loadExercises();
+                })
+                .catch(error => {
+                    console.error('Ошибка проверки токена:', error);
+                    logout();
+                });
+            }
+        }
+        
+        // Обновление интерфейса
+        function updateUI() {
+            if (currentUser) {
+                authButtons.style.display = 'none';
+                userMenu.style.display = 'block';
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.style.display = 'inline-block';
+                });
+                showSection('home');
+            } else {
+                authButtons.style.display = 'flex';
+                userMenu.style.display = 'none';
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    if (link.dataset.section !== 'home') {
+                        link.style.display = 'none';
+                    }
+                });
+                showSection('home');
+            }
+        }
+        
+        // Отображение секции
+        function showSection(sectionId) {
+            pageSections.forEach(section => {
+                section.classList.remove('active-section');
+            });
+            document.getElementById(sectionId).classList.add('active-section');
+            
+            // Загрузка данных при открытии разделов
+            if (sectionId === 'workout' && currentUser) {
+                loadWorkouts();
+            }
+        }
+        
+        // Обработка входа
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                const formData = new URLSearchParams();
+                formData.append('username', email);
+                formData.append('password', password);
+                
+                const response = await fetch(`${API_BASE_URL}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('authToken', data.access_token);
+                    checkAuth();
+                } else {
+                    const error = await response.json();
+                    alert(`Ошибка входа: ${error.detail}`);
+                }
+            } catch (error) {
+                console.error('Ошибка входа:', error);
+                alert('Произошла ошибка при входе');
+            }
+        }
+        
+        // Обработка регистрации
+        async function handleRegister(e) {
+            e.preventDefault();
+            
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                alert('Пароли не совпадают!');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password,
+                        full_name: fullName
+                    })
+                });
+                
+                if (response.ok) {
+                    const user = await response.json();
+                    alert(`Пользователь ${user.email} успешно зарегистрирован!`);
+                    showSection('login');
+                } else {
+                    const error = await response.json();
+                    alert(`Ошибка регистрации: ${error.detail}`);
+                }
+            } catch (error) {
+                console.error('Ошибка регистрации:', error);
+                alert('Произошла ошибка при регистрации');
+            }
+        }
+        
+        // Выход
+        function logout() {
+            localStorage.removeItem('authToken');
+            currentUser = null;
+            workouts = [];
+            exercises = [];
+            updateUI();
+            showSection('home');
+        }
+        
+        // Загрузка тренировок
+        async function loadWorkouts() {
+            try {
+                const token = localStorage.getItem('authToken');
+                const response = await fetch(`${API_BASE_URL}/workout-plans`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    workouts = await response.json();
+                    renderWorkouts();
+                } else {
+                    console.error('Ошибка загрузки тренировок');
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки тренировок:', error);
+            }
+        }
+        
+        // Отображение тренировок
+        function renderWorkouts() {
+            workoutList.innerHTML = '';
+            
+            if (workouts.length === 0) {
+                workoutList.innerHTML = `
+                    <div class="workout-card">
+                        <p>У вас пока нет тренировок. Создайте первую!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            workouts.forEach(workout => {
+                const workoutCard = document.createElement('div');
+                workoutCard.className = 'workout-card';
+                workoutCard.innerHTML = `
+                    <h3><i class="fas fa-running"></i> ${workout.name}</h3>
+                    <p>ID: ${workout.id} | Упражнений: ${workout.exercises?.length || 0}</p>
+                    <div class="workout-actions">
+                        <button class="btn btn-primary start-workout" data-id="${workout.id}">
+                            <i class="fas fa-play"></i> Начать
+                        </button>
+                        <button class="btn btn-secondary add-exercise" data-id="${workout.id}">
+                            <i class="fas fa-plus"></i> Добавить упражнение
+                        </button>
+                    </div>
+                    <div class="exercise-list" id="exercises-${workout.id}">
+                        ${workout.exercises?.map(ex => `
+                            <div class="exercise-item ${ex.completed ? 'completed' : ''}">
+                                <span>${ex.exercise.name} (${ex.duration || 'без времени'} сек)</span>
+                                <div>
+                                    ${ex.completed ? 
+                                        '<i class="fas fa-check"></i>' : 
+                                        '<button class="btn btn-sm btn-outline complete-exercise" data-id="${ex.id}">✓</button>'
+                                    }
+                                </div>
+                            </div>
+                        `).join('') || '<p>Нет упражнений</p>'}
+                    </div>
+                `;
+                workoutList.appendChild(workoutCard);
+            });
+            
+            // Обработчики для кнопок
+            document.querySelectorAll('.start-workout').forEach(btn => {
+                btn.addEventListener('click', () => startWorkout(btn.dataset.id));
+            });
+            
+            document.querySelectorAll('.add-exercise').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.getElementById('currentWorkoutId').value = btn.dataset.id;
+                    addExerciseModal.classList.add('active');
+                });
+            });
+            
+            document.querySelectorAll('.complete-exercise').forEach(btn => {
+                btn.addEventListener('click', () => completeExercise(btn.dataset.id));
+            });
+        }
+        
+        // Загрузка упражнений
+        async function loadExercises() {
+            try {
+                const token = localStorage.getItem('authToken');
+                const response = await fetch(`${API_BASE_URL}/exercises`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    exercises = await response.json();
+                    renderExerciseOptions();
+                } else {
+                    console.error('Ошибка загрузки упражнений');
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки упражнений:', error);
+            }
+        }
+        
+        // Отображение упражнений в выпадающем списке
+        function renderExerciseOptions() {
+            selectExercise.innerHTML = '<option value="">-- Выберите упражнение --</option>';
+            
+            exercises.forEach(exercise => {
+                const option = document.createElement('option');
+                option.value = exercise.id;
+                option.textContent = exercise.name;
+                selectExercise.appendChild(option);
+            });
+        }
+        
+        // Создание тренировки
+        async function createWorkout(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('workoutName').value;
+            
+            try {
+                const token = localStorage.getItem('authToken');
+                const response = await fetch(`${API_BASE_URL}/workout-plans`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        name: name
+                    })
+                });
+                
+                if (response.ok) {
+                    const workout = await response.json();
+                    workouts.push(workout);
+                    renderWorkouts();
+                    createWorkoutModal.classList.remove('active');
+                    workoutForm.reset();
+                } else {
+                    const error = await response.json();
+                    alert(`Ошибка создания тренировки: ${error.detail}`);
+                }
+            } catch (error) {
+                console.error('Ошибка создания тренировки:', error);
+                alert('Произошла ошибка при создании тренировки');
+            }
+        }
+        
+        // Создание упражнения
+        async function createExercise(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('exerciseName').value;
+            const description = document.getElementById('exerciseDescription').value;
+            const duration = document.getElementById('exerciseDuration').value || null;
+            
+            try {
+                const token = localStorage.getItem('authToken');
+                const response = await fetch(`${API_BASE_URL}/exercises`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        description: description,
+                        duration: duration ? parseInt(duration) : null
+                    })
+                });
+                
+                if (response.ok) {
+                    const exercise = await response.json();
+                    exercises.push(exercise);
+                    renderExerciseOptions();
+                    createExerciseModal.classList.remove('active');
+                    exerciseForm.reset();
+                    alert('Упражнение успешно создано!');
+                } else {
+                    const error = await response.json();
+                    alert(`Ошибка создания упражнения: ${error.detail}`);
+                }
+            } catch (error) {
+                console.error('Ошибка создания упражнения:', error);
+                alert('Произошла ошибка при создании упражнения');
+            }
+        }
+        
+        // Добавление упражнения в тренировку
+        async function addExerciseToWorkout(e) {
+            e.preventDefault();
+            
+            const workoutId = document.getElementById('currentWorkoutId').value;
+            const exerciseId = document.getElementById('selectExercise').value;
+            const duration = document.getElementById('exerciseDurationInWorkout').value || null;
+            const order = document.getElementById('exerciseOrder').value;
+            const autoContinue = document.getElementById('autoContinue').checked;
+            
+            try {
+                const token = localStorage.getItem('authToken');
+                const response = await fetch(`${API_BASE_URL}/workout-plans/${workoutId}/exercises`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        exercise_id: parseInt(exerciseId),
+                        duration: duration ? parseInt(duration) : null,
+                        auto_continue: autoContinue,
+                        order: parseInt(order)
+                    })
+                });
+                
+                if (response.ok) {
+                    loadWorkouts();
+                    addExerciseModal.classList.remove('active');
+                    addExerciseForm.reset();
+                    alert('Упражнение добавлено в тренировку!');
+                } else {
+                    const error = await response.json();
+                    alert(`Ошибка добавления упражнения: ${error.detail}`);
+                }
+            } catch (error) {
+                console.error('Ошибка добавления упражнения:', error);
+                alert('Произошла ошибка при добавлении упражнения');
+            }
+        }
+        
+        // Начать тренировку
+        async function startWorkout(planId) {
+            try {
+                const token = localStorage.getItem('authToken');
+                const response = await fetch(`${API_BASE_URL}/active-workouts`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        plan_id: parseInt(planId)
+                    })
+                });
+                
+                if (response.ok) {
+                    activeWorkout = await response.json();
+                    showActiveWorkout();
+                } else {
+                    const error = await response.json();
+                    alert(`Ошибка начала тренировки: ${error.detail}`);
+                }
+            } catch (error) {
+                console.error('Ошибка начала тренировки:', error);
+                alert('Произошла ошибка при начале тренировки');
+            }
+        }
+        
+        // Показать активную тренировку
+        function showActiveWorkout() {
+            const workout = workouts.find(w => w.id === activeWorkout.plan_id);
+            if (!workout) return;
+            
+            activeWorkoutTitle.textContent = workout.name;
+            workoutExerciseList.innerHTML = '';
+            
+            workout.exercises.forEach(ex => {
+                const isCurrent = ex.id === activeWorkout.current_exercise_id;
+                const exerciseEl = document.createElement('div');
+                exerciseEl.className = `exercise-item ${ex.completed ? 'completed' : ''} ${isCurrent ? 'current-exercise' : ''}`;
+                exerciseEl.innerHTML = `
+                    <span>${ex.exercise.name} (${ex.duration || 'без времени'} сек)</span>
+                    <div>
+                        ${ex.completed ? 
+                            '<i class="fas fa-check"></i>' : 
+                            (isCurrent ? '<i class="fas fa-play"></i>' : '')
+                        }
+                    </div>
+                `;
+                workoutExerciseList.appendChild(exerciseEl);
+                
+                if (isCurrent) {
+                    currentExerciseName.textContent = ex.exercise.name;
+                    currentExerciseDescription.textContent = ex.exercise.description || 'Нет описания';
+                    currentExerciseDuration.textContent = ex.duration || 'Нет';
+                    
+                    if (ex.duration) {
+                        timeLeft = ex.duration;
+                        updateTimerDisplay();
+                    }
+                }
+            });
+            
+            activeWorkoutModal.classList.add('active');
+        }
+        
+        // Обновление отображения таймера
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        // Старт таймера
+        function startTimer() {
+            if (isTimerRunning) return;
+            
+            isTimerRunning = true;
+            timerInterval = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    updateTimerDisplay();
+                } else {
+                    clearInterval(timerInterval);
+                    isTimerRunning = false;
+                    alert('Время вышло! Упражнение завершено.');
+                    // Автоматически завершаем упражнение
+                    completeExercise();
+                }
+            }, 1000);
+        }
+        
+        // Пауза таймера
+        function pauseTimer() {
+            if (isTimerRunning) {
+                clearInterval(timerInterval);
+                isTimerRunning = false;
+            }
+        }
+        
+        // Завершение упражнения
+        async function completeExercise() {
+            try {
+                const token = localStorage.getItem('authToken');
+                const response = await fetch(`${API_BASE_URL}/active-workouts/${activeWorkout.id}/complete-exercise`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    // Обновляем данные
+                    await loadWorkouts();
+                    showActiveWorkout();
+                    
+                    if (timerInterval) {
+                        clearInterval(timerInterval);
+                        isTimerRunning = false;
+                    }
+                } else {
+                    const error = await response.json();
+                    alert(`Ошибка завершения упражнения: ${error.detail}`);
+                }
+            } catch (error) {
+                console.error('Ошибка завершения упражнения:', error);
+                alert('Произошла ошибка при завершении упражнения');
+            }
+        }
+    </script>
 </body>
 </html>
