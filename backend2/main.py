@@ -14,10 +14,11 @@ from sqlalchemy import Boolean, ForeignKey, DateTime, Interval
 from datetime import datetime, timedelta, timezone
 import time
 from apscheduler.schedulers.background import BackgroundScheduler
+from fastapi.staticfiles import StaticFiles
 
 # Конфигурация
-SECRET_KEY = "your-secret-key"
-ALGORITHM = "HS256"
+SECRET_KEY = os.getenv('SECRET_KEY', '')
+ALGORITHM = os.getenv('ALGORITHM', 'HS256')
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 # Настройка SQLite базы данных
@@ -577,7 +578,5 @@ def complete_exercise(exercise_id: int):
         db.close()
 
 # Обслуживание фронтенда
-from fastapi.staticfiles import StaticFiles
-import os
 
 app.mount("/", StaticFiles(directory="frontendtest", html=True), name="frontendtest") #заменить на frontendtest для теста
