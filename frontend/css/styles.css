@@ -17,6 +17,12 @@ body {
 
 nav {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
+}
+navwide {
+    display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 40px;
@@ -87,7 +93,7 @@ nav {
 
 .content-blocks {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 30px;
     margin-top: 40px;
 }
@@ -98,8 +104,21 @@ nav {
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
-
+.blockx2wide {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
 .block h2 {
-    color: #e74c3c;
+    color: #14ee4a;
+    margin-bottom: 15px;
+}
+.h2 {
+    color: #14ee4a;
+    margin-bottom: 15px;
+}
+.blockx2wide h2 {
+    color: #14ee4a;
     margin-bottom: 15px;
 }
