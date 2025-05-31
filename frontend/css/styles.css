@@ -93,7 +93,7 @@ navwide {
 
 .content-blocks {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 30px;
     margin-top: 40px;
 }
@@ -119,6 +119,6 @@ navwide {
     margin-bottom: 15px;
 }
 .blockx2wide h2 {
-    color: #33147c;
+    color: #14ee4a;
     margin-bottom: 15px;
 }
